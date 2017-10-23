@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Giphy</title>
+</head>
+<body>
+
+	<div id="buttons">
+		<button data-topic = "sandbars">Sandbars</button>
+		<button data-topic = "snow">Snow</button>
+		<button data-topic = "curb-your-enthusiasm">Curb Your Enthusiasm</button>
+		<button data-topic = "mewtwo">Mewtwo</button>
+		<button data-topic = "samus">Samus</button>
+		<button data-topic = "Rumplestiltskin">Rumplestiltskin</button>
+	</div>
+
+	<div id="gifs"></div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript">
+
+		var topics = ["Sandbars","Snow","Curb Your Enthusiasm","Mewtwo","Samus","Rumplestiltskin"];
+
+		function createButtons() {
+			for (var i = 0; i < topics.length; i++) {
+				var button = $("<button>");
+			}
+		}
+
+		$("button").on("click", function() {
+			console.log($(this));
+			var topic = $(this).attr("data-topic");
+			var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topic + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+			$.ajax({
+				url: queryURL,
+				method: "GET"
+			}).done(function(response) {
+				console.log(response);
+
+				var results = response.data;
+
+				for (var i = 0; i < results.length; i++) {
+					var gifDiv = $("<div class='item'>");
+					var topicImage = $("<img>");
+					topicImage.attr("src", results[i].images.fixed_height.url);
+
+					gifDiv.prepend(topicImage);
+
+					$("#gifs").prepend(gifDiv);
+				}
+			});
+		});
+
+		createButtons();
+
+
+	</script>
+
+</body>
+</html>
